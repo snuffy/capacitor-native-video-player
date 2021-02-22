@@ -11,9 +11,56 @@ npx cap sync
 
 ## API
 
-<docgen-index></docgen-index>
+<docgen-index>
+
+* [`echo(...)`](#echo)
+* [`start(...)`](#start)
+* [Interfaces](#interfaces)
+
+</docgen-index>
 
 <docgen-api>
-<!-- run docgen to generate docs from the source -->
-<!-- More info: https://github.com/ionic-team/capacitor-docgen -->
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### echo(...)
+
+```typescript
+echo(options: { value: string; }) => any
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ value: string; }</code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### start(...)
+
+```typescript
+start(options: { playlist: IVideoData[]; }) => any
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ playlist: {}; }</code> |
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### Interfaces
+
+
+#### IVideoData
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`title`**  | <code>string</code> |
+| **`album`**  | <code>string</code> |
+| **`source`** | <code>string</code> |
+
 </docgen-api>

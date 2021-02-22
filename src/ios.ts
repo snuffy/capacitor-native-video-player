@@ -1,8 +1,8 @@
-import { WebPlugin } from '@capacitor/core';
+import { Plugin } from '@capacitor/core';
 
 import type { IVideoData, NvpPlugin } from './definitions';
 
-export class NvpWeb extends WebPlugin implements NvpPlugin {
+export class NvpIOS extends Plugin implements NvpPlugin {
   async echo(options: { value: string }): Promise<{ value: string }> {
     console.log('ECHO', options);
     return options;

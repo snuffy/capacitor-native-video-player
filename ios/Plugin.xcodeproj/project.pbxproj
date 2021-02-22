@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
+		294A76BA25D8A15600283318 /* NvpExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A76B925D8A15600283318 /* NvpExtension.swift */; };
+		294A76BE25D8A15E00283318 /* NvpPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A76BD25D8A15E00283318 /* NvpPlayerView.swift */; };
+		294A76C525D8A16700283318 /* NvpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A76C125D8A16700283318 /* NvpViewController.swift */; };
+		294A76C625D8A16700283318 /* NvpResoursesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A76C225D8A16700283318 /* NvpResoursesLoader.swift */; };
+		294A76C725D8A16700283318 /* NvpSideMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294A76C325D8A16700283318 /* NvpSideMenuView.swift */; };
+		294A76C825D8A16700283318 /* NvpResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 294A76C425D8A16700283318 /* NvpResources.bundle */; };
 		2F98D68224C9AAE500613A4C /* Nvp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* Nvp.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* NvpPluginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* NvpPluginTests.swift */; };
@@ -29,6 +35,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		294A76B925D8A15600283318 /* NvpExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvpExtension.swift; sourceTree = "<group>"; };
+		294A76BD25D8A15E00283318 /* NvpPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvpPlayerView.swift; sourceTree = "<group>"; };
+		294A76C125D8A16700283318 /* NvpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvpViewController.swift; sourceTree = "<group>"; };
+		294A76C225D8A16700283318 /* NvpResoursesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvpResoursesLoader.swift; sourceTree = "<group>"; };
+		294A76C325D8A16700283318 /* NvpSideMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvpSideMenuView.swift; sourceTree = "<group>"; };
+		294A76C425D8A16700283318 /* NvpResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = NvpResources.bundle; sourceTree = "<group>"; };
 		2F98D68124C9AAE400613A4C /* Nvp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nvp.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +106,12 @@
 			children = (
 				50E1A94720377CB70090CE1A /* NvpPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* Nvp.swift */,
+				294A76C425D8A16700283318 /* NvpResources.bundle */,
+				294A76C225D8A16700283318 /* NvpResoursesLoader.swift */,
+				294A76C325D8A16700283318 /* NvpSideMenuView.swift */,
+				294A76C125D8A16700283318 /* NvpViewController.swift */,
+				294A76BD25D8A15E00283318 /* NvpPlayerView.swift */,
+				294A76B925D8A15600283318 /* NvpExtension.swift */,
 				50ADFF8B201F53D600D50D53 /* NvpPlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* NvpPlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
@@ -230,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294A76C825D8A16700283318 /* NvpResources.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,11 +289,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
 				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
+				"${BUILT_PRODUCTS_DIR}/PIPKit/PIPKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PIPKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -307,8 +328,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				50E1A94820377CB70090CE1A /* NvpPlugin.swift in Sources */,
+				294A76C725D8A16700283318 /* NvpSideMenuView.swift in Sources */,
+				294A76C525D8A16700283318 /* NvpViewController.swift in Sources */,
+				294A76C625D8A16700283318 /* NvpResoursesLoader.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* Nvp.swift in Sources */,
+				294A76BA25D8A15600283318 /* NvpExtension.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* NvpPlugin.m in Sources */,
+				294A76BE25D8A15E00283318 /* NvpPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,7 +412,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -446,7 +472,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
