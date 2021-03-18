@@ -10,7 +10,7 @@ import UIKit
 
 // 色定義
 extension UIColor {
-    static let playerColorMain = #colorLiteral(red: 0, green: 0.5333333333, blue: 0.5882352941, alpha: 1)
+    static let playerColorMain = #colorLiteral(red: 0.87, green: 0.26, blue: 0.27, alpha: 1.00)
 }
 // 通知
 extension Notification.Name {
