@@ -1,5 +1,3 @@
-import { Plugin } from '@capacitor/core';
-
 import type { IVideoData, NvpPlugin } from './definitions';
 
 export class NvpIOS extends Plugin implements NvpPlugin {
