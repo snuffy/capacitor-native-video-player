@@ -49,7 +49,9 @@ class SideMenuView: UIView {
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.minimumTrackTintColor = .playerColorMain
         slider.maximumTrackTintColor = .white
-        slider.value = 0.5
+        slider.minimumValue = 0.5
+        slider.maximumValue = 2.0
+        slider.value = 1.0
         slider.addTarget(self, action: #selector(handleSpeedSliderChange), for: .valueChanged)
         return slider
     }()
@@ -171,9 +173,9 @@ class SideMenuView: UIView {
     }
     
     @objc private func handleSpeedSliderChange() {
-        let value = floor((speedSlider.value + 0.5) * 100) / 100
+        let value = floor((speedSlider.value) * 100) / 100
         speedLabel.text = "\(value)x"
-        NotificationCenter.default.post(name: .nativeVideoPlayerChangeSpeed, object: nil, userInfo: ["value": speedSlider.value + 0.5])
+        NotificationCenter.default.post(name: .nativeVideoPlayerChangeSpeed, object: nil, userInfo: ["value": speedSlider.value])
     }
     
     @objc private func handleBrightnessSliderChange() {

@@ -498,6 +498,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
         // バックグラウンド関係
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
     private func setupPlayer() {
@@ -678,7 +679,14 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
     // バックグラウンド移行時
     @objc func applicationDidBecomeActive(_ notifiaction: Notification){
         isBackground = false
+        playerLayer?.player = player
     }
+    
+    @objc func applicationWillResignActiveNotification(_ notifiaction: Notification){
+        isBackground = true
+        playerLayer?.player = nil
+    }
+
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if  touch.view == self.sideMenuView ||
