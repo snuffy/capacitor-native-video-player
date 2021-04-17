@@ -57,10 +57,11 @@ start(options: { playlist: IVideoData[]; }) => any
 
 #### IVideoData
 
-| Prop         | Type                |
-| ------------ | ------------------- |
-| **`title`**  | <code>string</code> |
-| **`album`**  | <code>string</code> |
-| **`source`** | <code>string</code> |
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`title`**    | <code>string</code> |
+| **`album`**    | <code>string</code> |
+| **`filePath`** | <code>string</code> |
+| **`url`**      | <code>string</code> |
 
 </docgen-api>
