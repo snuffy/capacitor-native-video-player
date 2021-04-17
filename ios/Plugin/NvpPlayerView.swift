@@ -496,7 +496,8 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: .AVPlayerItemDidPlayToEndTime, object: nil)
 
         // バックグラウンド関係
-        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
     }
@@ -685,6 +686,11 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
     @objc func applicationWillResignActiveNotification(_ notifiaction: Notification){
         isBackground = true
         playerLayer?.player = nil
+    }
+    
+    @objc func applicationWillEnterForeground(_ notifiaction: Notification){
+        isBackground = true
+        playerLayer?.player = player
     }
 
 

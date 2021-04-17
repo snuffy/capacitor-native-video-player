@@ -12,24 +12,39 @@ import PIPKit
         
         playData.forEach { (item) in
             guard let title = item["title"]?.removingPercentEncoding,
-                let album = item["album"]?.removingPercentEncoding,
-                let source = item["source"]?.removingPercentEncoding
+                let album = item["album"]?.removingPercentEncoding
             else {return}
-
-            // source が web なのか file なのかを判定する
-            let regularURL = source.replacingOccurrences(of: "file://", with: "")
+            
+            let urlString = item["url"]?.removingPercentEncoding
+            let filePath = item["filePath"]?.removingPercentEncoding
+            
+            if urlString == nil && filePath == nil {return}
+            
+            // path を取得
+            var path: URL?
+            if (filePath != nil) {
+                var documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                documentPath.appendPathComponent(filePath!, isDirectory: false)
+                path = documentPath
+            }
+            
+            // URL があれば URL
             var url: URL?
-            //
-            if regularURL.contains("http://") || regularURL.contains("https://") {
-                url = URL(string: regularURL)
+            if (urlString != nil) && (urlString!.contains("http://") || urlString!.contains("https://")) {
+                url = URL(string: urlString!)
             }
-            else {
-                url = URL(fileURLWithPath: regularURL)
+            
+            if (path != nil) {
+                guard let sourceURL = path else {return}
+                let m = MediaItem(title: title, album: album, source: sourceURL)
+                playlist.append(m)
             }
-            guard let sourceURL = url else {return}
-
-            let m = MediaItem(title: title, album: album, source: sourceURL)
-            playlist.append(m)
+            else if (url != nil) {
+                guard let sourceURL = url else {return}
+                let m = MediaItem(title: title, album: album, source: sourceURL)
+                playlist.append(m)
+            }
+            
         }
         if #available(iOS 11.0, *) {
             DispatchQueue.main.sync {
