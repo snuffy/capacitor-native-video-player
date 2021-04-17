@@ -1,7 +1,8 @@
 export interface IVideoData {
   title: string;
   album: string;
-  source: string;
+  filePath: string;
+  url: string;
 }
 
 export interface NvpPlugin {
