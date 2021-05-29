@@ -51,7 +51,7 @@ class SideMenuView: UIView {
         slider.maximumTrackTintColor = .white
         slider.minimumValue = 0.5
         slider.maximumValue = 2.0
-        slider.value = 1.0
+        slider.value = NvpUserDefaults.rate
         slider.addTarget(self, action: #selector(handleSpeedSliderChange), for: .valueChanged)
         return slider
     }()
@@ -59,7 +59,8 @@ class SideMenuView: UIView {
     // 音量
     let speedLabel: UILabel = {
         let label = UILabel()
-        label.text = "1x"
+        let value = floor((NvpUserDefaults.rate) * 100) / 100
+        label.text = "\(value)x"
         label.textColor = .white
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 16)

@@ -12,7 +12,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
     let resourceLoader = NvpResoucesLoader()
     var timer: Timer?
     var showControl = false
-    var rate: Float = 1.0
+    var rate: Float = NvpUserDefaults.rate
     var currentIndex = 0
     var isBackground = false
     // title text
@@ -356,6 +356,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
     @objc func handleChangeSpeed(notification: Notification) {
         guard let value = notification.userInfo?["value"] as? Float else {return}
         self.player?.rate = value
+        NvpUserDefaults.rate = value
         self.rate = value
         
     }
@@ -596,7 +597,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
         nowPlayingInfo[MPMediaItemPropertyTitle] = title
         nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = album
         nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: 1.0)
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: self.rate)
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
     }
     // Remote Command Event
