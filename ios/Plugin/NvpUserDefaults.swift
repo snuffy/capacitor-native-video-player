@@ -2,20 +2,20 @@
 //  NativeDownloaderUserDefaults.swift
 //  TAD
 //
-//  Created by shogo on 2020/05/24.
+//  Created by shogo funaguchi on 2020/06/04.
 //
 
 import Foundation
 
 struct NvpUserDefaults {
-    private static let rateKey = "nvp_player_speed_rate"
-
+    private static let KeyNativeVideoPlayerSpeedRate = "native_video_player_speed_rate"
+    
     static var rate: Float {
         get {
-            return getFloat(k: rateKey)
+            return getFloat(k: KeyNativeVideoPlayerSpeedRate)
         }
         set(v) {
-            set(k: rateKey, float: v)
+            set(k: KeyNativeVideoPlayerSpeedRate, float: v)
         }
     }
 }
@@ -51,6 +51,7 @@ extension NvpUserDefaults {
         }
     }
     
+    
     private static func getBool(k: String) -> Bool {
         return UserDefaults.standard.bool(forKey: key(k: k))
     }
@@ -83,13 +84,13 @@ extension NvpUserDefaults {
         d.setValue(int, forKey: key(k: k))
         d.synchronize()
     }
-    
+
     private static func set(k: String, int64: Int64) {
         let d = UserDefaults.standard
         d.setValue(int64, forKey: key(k: k))
         d.synchronize()
     }
-    
+
     private static func set(k: String, float: Float) {
         let d = UserDefaults.standard
         d.setValue(float, forKey: key(k: k))
@@ -122,6 +123,6 @@ extension NvpUserDefaults {
     }
     
     private static func key(k: String) -> String {
-        return "NativeVideoPlayer:\(k)"
+        return "native_video_player:\(k)"
     }
 }
