@@ -1,4 +1,4 @@
-package jp.snuffy.cap.plugins
+package jp.snuffy.cap.plugins.nvp
 
 import android.app.Notification
 import android.app.Service

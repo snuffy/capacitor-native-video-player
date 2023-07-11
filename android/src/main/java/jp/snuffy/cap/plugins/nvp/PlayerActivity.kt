@@ -1,4 +1,4 @@
-package jp.snuffy.cap.plugins
+package jp.snuffy.cap.plugins.nvp
 
 
 
@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.FEATURE_PICTURE_IN_PICTURE
@@ -18,6 +19,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Pair
 import android.view.View
@@ -90,11 +92,14 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     private var notificationId = 123456
 
 
+
     companion object {
         var activity: PlayerActivity? = null
         // TAG
         private const val TAG = "PlayerActivity"
+        const val PLAYBACK_RATE_PREFS_KEY = "nativeVideoPlayerPlayBackRate"
 
+        var ratePrefs: SharedPreferences? = null
         // Saved instance state keys.
         private const val KEY_WINDOW = "window"
         private const val KEY_POSITION = "position"
@@ -102,9 +107,14 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
         private const val KEY_TRACK_SELECTOR_PARAMETERS = "track_selector_parameters"
 
         // Playback speed
+        private const val PLAYBACK_RATE_05 = 0.5f
         private const val PLAYBACK_RATE_08 = 0.8f
         private const val PLAYBACK_RATE_10 = 1.0f
+        private const val PLAYBACK_RATE_12 = 1.2f
         private const val PLAYBACK_RATE_15 = 1.5f
+        private const val PLAYBACK_RATE_18 = 1.8f
+        private const val PLAYBACK_RATE_20 = 2.0f
+
 
         @Suppress("DEPRECATED_IDENTITY_EQUALS")
         private fun isBehindLiveWindow(error :ExoPlaybackException) : Boolean {
@@ -125,6 +135,8 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = this
+
+        ratePrefs = activity?.getSharedPreferences(PLAYBACK_RATE_PREFS_KEY, Context.MODE_PRIVATE)
         setContentView(resources.getIdentifier("activity_player", "layout", application.packageName))
 
         savedInstanceState?.also {
@@ -160,6 +172,9 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     override fun onStart() {
         super.onStart()
         activity = this
+        if (ratePrefs != null) {
+            playbackRate = ratePrefs!!.getFloat("rate", 1.0f)
+        }
         playerView?.let {
             it.setControllerVisibilityListener(this)
             it.setErrorMessageProvider(PlayerErrorMessageProvider())
@@ -175,15 +190,28 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
         rateButton?.setOnClickListener {
             var rate = playbackRate
             when (playbackRate) {
+                PLAYBACK_RATE_05 -> {
+                    rate = PLAYBACK_RATE_08
+                }
                 PLAYBACK_RATE_08 -> {
                     rate = PLAYBACK_RATE_10
                 }
                 PLAYBACK_RATE_10 -> {
+                    rate = PLAYBACK_RATE_12
+                }
+                PLAYBACK_RATE_12 -> {
                     rate = PLAYBACK_RATE_15
                 }
                 PLAYBACK_RATE_15 -> {
-                    rate = PLAYBACK_RATE_08
+                    rate = PLAYBACK_RATE_18
                 }
+                PLAYBACK_RATE_18 -> {
+                    rate = PLAYBACK_RATE_20
+                }
+                PLAYBACK_RATE_20 -> {
+                    rate = PLAYBACK_RATE_05
+                }
+
             }
             setPlaybackSpeed(rate)
         }
@@ -289,21 +317,19 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     }
 
     override fun onBackPressed() {
-        //FIXME: pipModeで別タスク起動を解決できれば解放する
-        super.onBackPressed()
-        releasePlayer()
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-//                && packageManager.hasSystemFeature(FEATURE_PICTURE_IN_PICTURE)) {
-//            enterPIPMode()
-//        } else {
-//            super.onBackPressed()
-//        }
+        //  super.onBackPressed()
+        //  releasePlayer()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                && packageManager.hasSystemFeature(FEATURE_PICTURE_IN_PICTURE)) {
+            enterPIPMode()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        //FIXME: pipModeで別タスク起動を解決できれば解放する
-//        enterPIPMode()
+        // super.onUserLeaveHint()
+        enterPIPMode()
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
@@ -367,6 +393,9 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     }
 
     private fun initializePlayer() {
+        if (ratePrefs != null) {
+            playbackRate = ratePrefs!!.getFloat("rate", 1.0f)
+        }
         mediaSource = createTopLevelMediaSource()
 
         if (player == null) {
@@ -383,6 +412,7 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
                         .also {
                             it.setAudioAttributes(AudioAttributes.DEFAULT, true)
                             setPlaybackSpeed(playbackRate)
+                            it.setPlaybackParameters(PlaybackParameters(playbackRate));
                             it.playWhenReady = startAutoPlay
                             it.addListener(PlayerEventListener())
                             it.addAnalyticsListener(EventLogger(trackSelector))
@@ -472,7 +502,8 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     private fun getCurrentMedia() : MediaItem? {
         player?.let {  player ->
             items?.let {items ->
-                return items[player.currentTag as Int]
+                val index = if (player.currentTag != null) player.currentTag as Int  else 0
+                return items[index]
             }
         }
 
@@ -489,7 +520,11 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
         var concatMediaSource = ConcatenatingMediaSource()
         playerView?.let {
             items?.forEachIndexed { index, item ->
-                val url = Uri.parse(URLDecoder.decode(item.source, "UTF-8"))
+                // ローカルか、URLかで変える
+                val target = if (item.filePath != null) {
+                    this.applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + item.filePath;
+                } else item.url
+                val url = Uri.parse(URLDecoder.decode(target, "UTF-8"))
                 when (Util.inferContentType(url)) {
                     C.TYPE_HLS -> {
                         val mediaSource = HlsMediaSource
@@ -577,6 +612,11 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
             } else {
                 Log.d(TAG, "playback speed is not changed!");
             }
+        }
+        if (ratePrefs != null) {
+            val editor = ratePrefs!!.edit()
+            editor.putFloat("rate", rate);
+            editor.apply()
         }
         rateButton?.text = String.format("x%.1f", rate)
     }
@@ -669,7 +709,8 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
     private fun updateTitleView() {
         player?.let {  player ->
             items?.let {items ->
-                val item = items[player.currentTag as Int]
+                val index = if (player.currentTag != null) player.currentTag as Int  else 0
+                val item = items[index]
                 print(item)
                 item.source?.let {
                     val mimeType = getMimeType(URLDecoder.decode(it, "UTF-8"))
@@ -738,7 +779,8 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
                 }
                 items?.let { items ->
                     previewImageView?.let {
-                        val item = items[player.currentTag as Int]
+                        val index = if (player.currentTag != null) player.currentTag as Int  else 0
+                        val item = items[index]
                         Glide.with(it)
                                 .load(URLDecoder.decode(item.source, "UTF-8"))
                                 .override(SIZE_ORIGINAL, SIZE_ORIGINAL)

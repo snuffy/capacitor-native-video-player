@@ -10,3 +10,9 @@ export interface NvpPlugin {
 
   start(options: { playlist: IVideoData[] }): Promise<void>;
 }
+
+declare module '@capacitor/core' {
+  interface PluginRegistry {
+    NvpPlugin: NvpPlugin;
+  }
+}

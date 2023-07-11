@@ -1,4 +1,4 @@
-package jp.snuffy.cap.plugins
+package jp.snuffy.cap.plugins.nvp
 
 import android.graphics.Bitmap
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
