@@ -11,7 +11,7 @@ class PlayerService: Service() {
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // foreground service of video player
-        val notification = intent?.getParcelableExtra("notification") as Notification
+        val notification = intent?.getParcelableExtra<Notification>("notification") as Notification
         val notificationId = intent?.getIntExtra("notificationId", 0)
         if (notification != null && notificationId != 0) {
             startForeground(notificationId, notification)
