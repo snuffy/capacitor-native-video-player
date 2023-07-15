@@ -441,6 +441,7 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
                                     this,
                                     application.packageName,
                                     R.string.exo_download_notification_channel_name,
+                                    0,
                                     notificationId,
                                     object: PlayerNotificationManager.MediaDescriptionAdapter {
                                         override fun createCurrentContentIntent(player: Player): PendingIntent? {
@@ -465,16 +466,15 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
                                     },
                                     // 通知コントローラー
                                     object: PlayerNotificationManager.NotificationListener {
-                                        override fun onNotificationStarted(notificationId: Int, notification: Notification) {
+
+                                        override fun onNotificationPosted(notificationId: Int, notification: Notification, ongoing: Boolean) {
                                             startBackgroundNotification(notificationId, notification)
                                         }
                                         override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
                                             self.releasePlayer()
                                         }
 
-                                        override fun onNotificationPosted(notificationId: Int, notification: Notification, ongoing: Boolean) {
-                                            startBackgroundNotification(notificationId, notification)
-                                        }
+
                                     })
                             playerNotificationManager?.setPlayer(it)
                             val session = MediaSessionCompat(applicationContext, "nativeVideoPlayer")
@@ -557,7 +557,7 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
             release()
             player = null
             mediaSource = null
-            trackSelector = null
+//            trackSelector = null
         }
 
         adsLoader?.apply {
