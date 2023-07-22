@@ -13,6 +13,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
     var timer: Timer?
     var showControl = false
     var rate: Float = NvpUserDefaults.rate
+    var duration: Int = 0
     var currentIndex = 0
     var isBackground = false
     // title text
@@ -376,7 +377,7 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
         }
     }
     
-    public func setPlaylist(playlist: [MediaItem]) {
+    public func setPlaylist(playlist: [MediaItem]) -> String {
         self.playlist = playlist
 
         if playlist.count > 0 {
@@ -385,14 +386,19 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
             playerItem.addObserver(self, forKeyPath: "playbackLikelyToKeepUp", options: .new, context: nil)
             player?.replaceCurrentItem(with: playerItem)
             player?.playImmediately(atRate: rate)
+
+            
             updateTitleTextView()
             // updateNowPlayingInfo
             updateNowPlayingInfo()
             updateRemoteCommandCenter()
             timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(onTimerEnd), userInfo: nil, repeats: false)
             isPlay = true
+        
         }
+        return ""
     }
+    
     
     private func updateTitleTextView() {
         let current = playlist[currentIndex]
@@ -509,13 +515,18 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
         let interval = CMTime(seconds: 0.5, preferredTimescale: timeScale)
 
         player.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
+        player.addObserver(self, forKeyPath: "status", options: .new, context: nil)
         player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main, using: { [weak self] progress in
             guard let self = self else {return}
             let seconds = CMTimeGetSeconds(progress)
             let times = self.getTimes(duration: progress)
+//            print(progress.value)
             self.currentTimeLabel.text = "\(times) /"
             if let duration = self.player?.currentItem?.duration {
                 let durationSeconds = CMTimeGetSeconds(duration)
+                let current = playlist[currentIndex]
+                print(seconds)
+                NvpUserDefaults.setCurrentDuration(videoUrl: current.source.absoluteString , duration: Float(seconds) )
                 self.videoSlider.value = Float(seconds / durationSeconds)
             }
         })
@@ -535,7 +546,31 @@ class VideoPlayerView: UIView, UIGestureRecognizerDelegate {
             if let duration = player?.currentItem?.duration {
                 videoLengthLabel.text = getTimes(duration: duration)
             }
+            
+            
+            
+  
         }
+        
+        if keyPath == "status" && player?.status == .readyToPlay {
+            if let duration = player?.currentItem?.duration {
+                var totalSecounds = CMTimeGetSeconds(duration)
+                if (totalSecounds.isNaN || totalSecounds.isFinite) {
+                    totalSecounds = 1;
+                }
+                let d = NvpUserDefaults.getCurrentDuration(videoUrl: playlist[currentIndex].source.absoluteString) ?? 0
+                let value = Float64(d)
+                if (value > 0) {
+                    player?.pause()
+                    let seekTime = CMTime(value: CMTimeValue(value), timescale: 1)
+                    player?.seek(to: seekTime)
+                    player?.playImmediately(atRate: rate)
+                }
+            }
+        }
+        
+
+
         // バックグラウンドに入った時に、再生がストップするのを防止する
         if keyPath == #keyPath(AVPlayerItem.playbackLikelyToKeepUp) {
             guard let item = object as? AVPlayerItem else {return}
