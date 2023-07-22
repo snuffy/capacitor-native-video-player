@@ -18,6 +18,15 @@ struct NvpUserDefaults {
             set(k: KeyNativeVideoPlayerSpeedRate, float: v)
         }
     }
+    
+    static func getCurrentDuration(videoUrl: String) -> Float {
+        return getFloat(k: "native_video_player_duration_\(videoUrl)")
+    }
+    
+    static func setCurrentDuration(videoUrl: String, duration: Float) {
+        set(k: "native_video_player_duration_\(videoUrl)", float: duration)
+    }
+
 }
 
 extension NvpUserDefaults {
