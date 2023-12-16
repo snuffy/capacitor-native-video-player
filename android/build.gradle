@@ -6,14 +6,14 @@ ext {
 }
 
 buildscript {
-    ext.kotlin_version = '1.4.30'
+    ext.kotlin_version = '1.8.0'
     repositories {
         google()
         jcenter()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.2'
+        classpath 'com.android.tools.build:gradle:8.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -22,6 +22,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace "jp.snuffy.cap.plugins.nvp"
     compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 30
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
@@ -81,9 +82,9 @@ dependencies {
     implementation 'com.github.rubensousa:previewseekbar:3.0.0'
     implementation 'com.github.rubensousa:previewseekbar-exoplayer:2.11.4.0'
 
-    def glide_version = '4.11.0'
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
-    implementation "androidx.core:core-ktx:1.5.0"
+//    def glide_version = '4.12.0'
+//    implementatison "com.github.bumptech.glide:glide:$glide_version"
+//    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "androidx.core:core-ktx:1.9.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

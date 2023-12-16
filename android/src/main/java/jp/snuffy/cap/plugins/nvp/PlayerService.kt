@@ -14,7 +14,7 @@ class PlayerService: Service() {
         val notification = intent?.getParcelableExtra<Notification>("notification") as Notification
         val notificationId = intent?.getIntExtra("notificationId", 0)
         if (notification != null && notificationId != 0) {
-            startForeground(notificationId, notification)
+            startForeground(notificationId!!, notification)
         }
         else {
             stopSelf()

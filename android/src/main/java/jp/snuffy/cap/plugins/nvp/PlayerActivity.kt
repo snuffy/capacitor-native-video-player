@@ -332,8 +332,7 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
         enterPIPMode()
     }
 
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
 
         if (!isInPictureInPictureMode) {
             playerView?.apply {
@@ -440,7 +439,7 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
                             playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
                                     this,
                                     application.packageName,
-                                    R.string.exo_download_notification_channel_name,
+                                    com.google.android.exoplayer2.R.string.exo_download_notification_channel_name,
                                     0,
                                     notificationId,
                                     object: PlayerNotificationManager.MediaDescriptionAdapter {
