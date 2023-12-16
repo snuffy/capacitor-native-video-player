@@ -28,14 +28,18 @@ class NvpPlugin : Plugin() {
     fun start(call: PluginCall) {
         val playlist = call.getArray("playlist")
         GsonBuilder().create().also { gson ->
-            val items = gson.fromJson(playlist.toString(), Array<MediaItem>::class.java).toList()
-            items.forEach {
+            var items = gson.fromJson(playlist.toString(), Array<MediaItem>::class.java).toList()
+            items = items.map { it ->
                 if (it.url != null) {
                     Log.d(TAG, "MediaItem for Stream file: ${URLDecoder.decode(it.url, "UTF-8")}")
                 }
                 if (it.filePath != null) {
                     Log.d(TAG, "MediaItem local file: ${URLDecoder.decode(it.filePath, "UTF-8")}")
+                    Log.d(TAG, "MediaItem local file: ${it.filePath}")
+                    it.filePath = it.filePath?.replace("file://", "").toString()
                 }
+
+                it
             }
 
             val intent = Intent(activity.application, PlayerActivity::class.java)

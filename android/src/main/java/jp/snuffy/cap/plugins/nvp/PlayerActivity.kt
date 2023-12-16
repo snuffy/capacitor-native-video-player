@@ -521,8 +521,9 @@ class PlayerActivity : AppCompatActivity(), PlayerControlView.VisibilityListener
             items?.forEachIndexed { index, item ->
                 // ローカルか、URLかで変える
                 val target = if (item.filePath != null) {
-                    this.applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + item.filePath;
+                    item.filePath
                 } else item.url
+
                 val url = Uri.parse(URLDecoder.decode(target, "UTF-8"))
                 when (Util.inferContentType(url)) {
                     C.TYPE_HLS -> {
